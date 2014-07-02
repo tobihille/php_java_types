@@ -11,7 +11,7 @@ class ConvString extends SplString
         if (is_integer($i) || $i instanceof SplInt)
         {
             $xx = $this->getValue();
-            return mb_substr($xx, $i, 1);
+            return new ConvChar( mb_substr($xx, $i, 1) );
         }
         else
         {
@@ -19,14 +19,120 @@ class ConvString extends SplString
         }
     }
 
-    public function startsWith($needle)
+    public function compareTo($str)
     {
-        return $needle === "" || strpos($this->getValue(), $needle) === 0;
+        if ( is_string($str) || $str instanceof SplString)
+        {
+            return new ConvBool( strcmp($this->getValue(), $str) );
+        }
+        else
+        {
+            $this->throwException(new SplString('string'), $str);
+        }
+    }
+
+    public function concat($str)
+    {
+        if ( is_string($str) || $str instanceof SplString)
+        {
+            return new ConvString($this->getValue().$str);
+        }
+        else
+        {
+            $this->throwException(new SplString('string'), $str);
+        }
+    }
+
+    public function contains($str)
+    {
+        if ( is_string($str) || $str instanceof SplString)
+        {
+            return new ConvBool( strpos($this->getValue(), $str) !== false );
+        }
+        else
+        {
+            $this->throwException(new SplString('string'), $str);
+        }
     }
 
     public function endsWith($needle)
     {
-        return $needle === "" || substr($this->getValue(), -strlen($needle)) === $needle;
+        if (is_string($needle) || $needle instanceof SplString)
+        {
+            return new ConvBool( $needle === "" || substr($this->getValue(), -strlen($needle)) === $needle );
+        }
+        else
+        {
+            $this->throwException(new SplString('string'), $needle);
+        }
+    }
+
+    public function indexOf($str, $idx = 0)
+    {
+        if (is_string($str) || $str instanceof SplString)
+        {
+            if (is_integer($idx) || $idx instanceof SplInt)
+            {
+                return new ConvInt( strpos($this->getValue(), $str, $idx) );
+            }
+            else
+            {
+                $this->throwException(new SplString('integer'), $idx);
+            }
+        }
+        else
+        {
+            $this->throwException(new SplString('string'), $str);
+        }
+    }
+
+    public function length()
+    {
+        return new ConvInt( mb_strlen($this->getValue()) );
+    }
+
+    public function matches($regex, $flags)
+    {
+        if (is_string($regex) || $regex instanceof SplString)
+        {
+            return new ConvBool( preg_match($regex, $this->getValue()) === 1 );
+        }
+        else
+        {
+            $this->throwException(new SplString('string'), $regex);
+        }
+    }
+
+    public function replace($part, $pattern)
+    {
+        if (is_string($part) || is_string($pattern) ||
+            $part instanceof SplString || $pattern instanceof SplString)
+        {
+            return new ConvString( str_replace($part, $pattern, $this->getValue()) );
+        }
+        else
+        {
+            if (is_string($part) || $part instanceof SplString)
+            {
+                $this->throwException(new SplString('string'), $pattern);
+            }
+            else
+            {
+                $this->throwException(new SplString('string'), $part);
+            }
+        }
+    }
+
+    public function startsWith($needle)
+    {
+        if (is_string($needle) || $needle instanceof SplString)
+        {
+            return new ConvBool( $needle === "" || strpos($this->getValue(), $needle) === 0 );
+        }
+        else
+        {
+            $this->throwException(new SplString('string'), $needle);
+        }
     }
 
     protected function getValue()
