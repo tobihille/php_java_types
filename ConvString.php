@@ -91,7 +91,7 @@ class ConvString extends SplString
         return new ConvInt( mb_strlen($this->getValue()) );
     }
 
-    public function matches($regex, $flags)
+    public function matches($regex)
     {
         if (is_string($regex) || $regex instanceof SplString)
         {
@@ -133,6 +133,79 @@ class ConvString extends SplString
         {
             $this->throwException(new SplString('string'), $needle);
         }
+    }
+
+    public function split($char, $limit = 0)
+    {
+        if (is_string($char) && strlen($char) == 1 || $char instanceof ConvChar)
+        {
+            $ret = array();
+            if ( empty($limit) )
+            {
+                $ret = explode($char, $this->getValue());
+            }
+            else
+            {
+                if (is_integer($limit) || $limit instanceof SplInt)
+                {
+                    $ret = explode($char, $this->getValue(), $limit);
+                }
+                else
+                {
+                    $this->throwException(new SplString('integer'), $limit);
+                }
+            }
+            return (new ConvArray())->fromArray($ret);
+        }
+        else
+        {
+            $this->throwException(new SplString('char'), $char);
+        }
+    }
+
+    public function substring($start, $length = PHP_INT_MAX)
+    {
+        if (is_integer($start) || $start instanceof SplInt)
+        {
+            if (is_integer($length) || $length instanceof SplInt)
+            {
+                return new ConvString( substr($this->getValue(), $start, $length) );
+            }
+            else
+            {
+                $this->throwException(new SplString('integer'), $length);
+            }
+        }
+        else
+        {
+            $this->throwException(new SplString('integer'), $start);
+        }
+    }
+
+    public function toLowercase()
+    {
+        return new ConvString( strtolower($this->getValue()) );
+    }
+
+    public function toUppercase()
+    {
+        return new ConvString( strtoupper($this->getValue()) );
+    }
+
+    public function trim($charList = null)
+    {
+        if (!empty($charList))
+        {
+            if (is_string($charList) || $charList instanceof SplString )
+            {
+                return new ConvString( trim($this->getValue(), $charList) );
+            }
+            else
+            {
+                $this->throwException(new SplString('string'), $charList);
+            }
+        }
+        return new ConvString( trim($this->getValue()) );
     }
 
     protected function getValue()
