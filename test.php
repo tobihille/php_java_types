@@ -1,17 +1,16 @@
 <?php
 
 require_once('typeLoader.php');
+$lb = "\n<br>";
 
 try
 {
     $foo = new ConvString("1234567890");
 
-    return $foo->charAt('ö');
+    echo $foo->charAt(2).$lb;
 }
 catch (Exception $e)
 {
-    $lb = "\n<br>";
-
     echo get_class($e).$lb;
     echo $e->getMessage().$lb;
     echo nl2br($e->getTraceAsString());

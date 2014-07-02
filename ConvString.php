@@ -2,7 +2,6 @@
 
 class ConvString extends SplString
 {
-
     /**
      * @param $i
      * @return mixed
@@ -11,7 +10,8 @@ class ConvString extends SplString
     {
         if (is_integer($i) || $i instanceof SplInt)
         {
-            return $this[$i];
+            $xx = $this->getValue();
+            return mb_substr($xx, $i, 1);
         }
         else
         {
@@ -19,14 +19,22 @@ class ConvString extends SplString
         }
     }
 
-    function startsWith($haystack, $needle)
+    public function startsWith($needle)
     {
-        return $needle === "" || strpos($haystack, $needle) === 0;
+        return $needle === "" || strpos($this->__default, $needle) === 0;
     }
 
-    function endsWith($haystack, $needle)
+    public function endsWith($needle)
     {
-        return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+        return $needle === "" || substr($this->__default, -strlen($needle)) === $needle;
+    }
+
+    protected function getValue()
+    {
+        ob_start();
+        echo $this;
+        $value = ob_get_clean();
+        return $value;
     }
 
     protected function throwException(SplString $expectedType, $value)
@@ -46,6 +54,6 @@ class ConvString extends SplString
             $res = explode(' ', $res, 2);
             $classname = $res[0];
         }
-        throw new UnexpectedArgumentException('Expected integer, found '.$classname);
+        throw new UnexpectedArgumentException('Expected '.$expectedType.', found '.$classname);
     }
 }
