@@ -21,12 +21,12 @@ class ConvString extends SplString
 
     public function startsWith($needle)
     {
-        return $needle === "" || strpos($this->__default, $needle) === 0;
+        return $needle === "" || strpos($this->getValue(), $needle) === 0;
     }
 
     public function endsWith($needle)
     {
-        return $needle === "" || substr($this->__default, -strlen($needle)) === $needle;
+        return $needle === "" || substr($this->getValue(), -strlen($needle)) === $needle;
     }
 
     protected function getValue()
