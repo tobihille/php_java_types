@@ -1,8 +1,48 @@
 <?php
 
+/**
+ * Define Class UnexpectedArgumentException - nothing special - just for more detailed Information
+ */
 class UnexpectedArgumentException extends Exception
 {
 
+}
+
+class NotImplementedException extends Exception
+{
+
+}
+
+/**
+ * Class Struct - disable getter and setter
+ */
+abstract class ValueStruct
+{
+    protected $value = null;
+
+    public function __get( $property )
+    {
+        if ($property != "value")
+        {
+            throw new RuntimeException( 'Trying to get non-existing property ' . $property );
+        }
+        else
+        {
+            return $this->value;
+        }
+    }
+
+    public function __set( $property, $value )
+    {
+        if ($property != "value")
+        {
+            throw new RuntimeException( 'Trying to set non-existing property ' . $property );
+        }
+        else
+        {
+            throw new NotImplementedException('You need to define this setter in your class!');
+        }
+    }
 }
 
 /**
