@@ -2,7 +2,7 @@
 
 function endsWith($haystack, $needle)
 {
-    return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+    return $needle === "" || mb_substr($haystack, -mb_strlen($needle)) === $needle;
 }
 
 $filePath = dirname(__FILE__);

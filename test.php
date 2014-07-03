@@ -5,11 +5,9 @@ $lb = "\n<br>";
 
 try
 {
-    $foo = new ConvString("1234567890");
+    $foo = new ConvChar("Ö");
 
-    echo $foo->charAt(2).$lb;
-    echo $foo->startsWith('123').$lb;
-    echo $foo->endsWith('890').$lb;
+    echo $foo->charCount().$lb;
 }
 catch (Exception $e)
 {

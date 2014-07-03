@@ -47,7 +47,7 @@ class ConvString extends SplString
     {
         if ( is_string($str) || $str instanceof SplString)
         {
-            return new ConvBool( strpos($this->getValue(), $str) !== false );
+            return new ConvBool( mb_strpos($this->getValue(), $str) !== false );
         }
         else
         {
@@ -59,7 +59,7 @@ class ConvString extends SplString
     {
         if (is_string($needle) || $needle instanceof SplString)
         {
-            return new ConvBool( $needle === "" || substr($this->getValue(), -strlen($needle)) === $needle );
+            return new ConvBool( $needle === "" || mb_substr($this->getValue(), -mb_strlen($needle)) === $needle );
         }
         else
         {
@@ -73,7 +73,7 @@ class ConvString extends SplString
         {
             if (is_integer($idx) || $idx instanceof SplInt)
             {
-                return new ConvInt( strpos($this->getValue(), $str, $idx) );
+                return new ConvInt( mb_strpos($this->getValue(), $str, $idx) );
             }
             else
             {
@@ -127,7 +127,7 @@ class ConvString extends SplString
     {
         if (is_string($needle) || $needle instanceof SplString)
         {
-            return new ConvBool( $needle === "" || strpos($this->getValue(), $needle) === 0 );
+            return new ConvBool( $needle === "" || mb_strpos($this->getValue(), $needle) === 0 );
         }
         else
         {
@@ -137,7 +137,7 @@ class ConvString extends SplString
 
     public function split($char, $limit = 0)
     {
-        if (is_string($char) && strlen($char) == 1 || $char instanceof ConvChar)
+        if (is_string($char) && mb_strlen($char) == 1 || $char instanceof ConvChar)
         {
             $ret = array();
             if ( empty($limit) )
@@ -169,7 +169,7 @@ class ConvString extends SplString
         {
             if (is_integer($length) || $length instanceof SplInt)
             {
-                return new ConvString( substr($this->getValue(), $start, $length) );
+                return new ConvString( mb_substr($this->getValue(), $start, $length) );
             }
             else
             {
@@ -184,12 +184,12 @@ class ConvString extends SplString
 
     public function toLowercase()
     {
-        return new ConvString( strtolower($this->getValue()) );
+        return new ConvString( mb_strtolower($this->getValue()) );
     }
 
     public function toUppercase()
     {
-        return new ConvString( strtoupper($this->getValue()) );
+        return new ConvString( mb_strtoupper($this->getValue()) );
     }
 
     public function trim($charList = null)
@@ -208,12 +208,16 @@ class ConvString extends SplString
         return new ConvString( trim($this->getValue()) );
     }
 
-    protected function getValue()
+    public function getValue()
     {
+        /* old and outdated:
         ob_start();
         echo $this;
         $value = ob_get_clean();
         return $value;
+        */
+        //new and sexy:
+        return $this;
     }
 
     protected function throwException(SplString $expectedType, $value)
