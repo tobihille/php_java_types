@@ -1,0 +1,8 @@
+{
+    "name": "tobihille/php_java_types",
+    "description": "Implements conveniant usable type objects for php",
+    "license": "BSD",
+    "require": {
+
+    }
+}
